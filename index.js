@@ -1,11 +1,11 @@
 'use strict';
 
+const server = require('./src/server.js');
+require('dotenv').config(); //need for process.env (works for whole file)
 const mongoose = require('mongoose');
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
-const server = require('./src/server.js');
+// const MONGODB_URI = process.env.MONGODB_URI;
 
-require('dotenv').config(); //need for process.env (works for whole file)
 
 //this starts the DB Server
 
@@ -15,12 +15,7 @@ const options = {
   useUnifiedTopography: true,
 };
 
-// mongoose.connect(process.env.MONGODB_URI, options);
-
-mongoose.connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true})
-.then(() => {
-  app.listen(PORT, () => {
-    console.log(`server up: ${PORT}`)
-  });
-})
-.catch(e => console.error(e.message));
+//KEEP IN INDEX!!!
+mongoose.connect(process.env.MONGODB_URI, options)
+.then(() => server.start(PORT))
+  .catch(error => console.error('Cannot start server', error.message));
