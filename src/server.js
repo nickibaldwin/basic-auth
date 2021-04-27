@@ -1,31 +1,43 @@
 'use strict';
 
 // 3rd party npm dependencies
-const express = require('express'); // gives us a framework for building APIs
-const cors = require('cors'); // opens up our server for any domain to access
+const express = require('express');// gives us a framework for building APIs
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const morgan = require('morgan');
+const cors = require('cors');// opens up our server for any domain to access
+const { response } = require('express');
 
-const errorHandler = require('./auth/middleware/500.js');
-const notFound = require('./auth/middleware/404.js');
-const authRouter = require('./routes/router.js');
+const basicAuth = require('./auth/middleware/basic-auth.js');
+
+dotenv.config();
+
+// const errorHandler = require('./auth/middleware/500.js');
+// const notFound = require('./auth/middleware/404.js');
+// const authRouter = require('./routes/router.js');
 
 const app = express();
+const PORT = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-//MW
+app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors());
 
-// Process JSON input and put the data on req.body
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use(authRouter);
+app.use(basicAuth);
 
 //Catchall
-app.use(notFound);
-app.use(errorHandler);
+// app.use(notFound);
+// app.use(errorHandler);
 
-module.exports = { server:app, start: (port)=> app.listen(port, ()=> console.log(`server is up on ${PORT}`))};
-
+// mongoose.connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true})
+// .then(() => {
+//   app.listen(PORT, () => {
+//     console.log(`server up: ${PORT}`)
+//   });
+// })
+// .catch(e => console.error(e.message));
 
