@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');// opens up our server for any domain to access
-const { response } = require('express');
+const Users = require('./auth/models/user-schema.js');
 
 const basicAuth = require('./auth/middleware/basic-auth.js');
 
@@ -32,12 +32,7 @@ app.use(basicAuth);
 //Catchall
 // app.use(notFound);
 // app.use(errorHandler);
-
-// mongoose.connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true})
-// .then(() => {
-//   app.listen(PORT, () => {
-//     console.log(`server up: ${PORT}`)
-//   });
-// })
-// .catch(e => console.error(e.message));
+module.exports = { server: app, start:(PORT) => app.listen(PORT, () => {
+     console.log(`server up: ${PORT}`)
+   })};
 
